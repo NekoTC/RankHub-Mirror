@@ -16,28 +16,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1. 拉取 4 个产物
-      - name: Download artifacts
+      - name: Download all artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          repo:         qianmo2233/RankHub
-          workflow:     build_app.yml
-          name:         |
-            Android-APK-*
-            Unsigned-iOS-IPA
-          path:         ./zips
+          repo: qianmo2233/RankHub
+          workflow: build_app.yml
+          path: ./zips
           workflow_conclusion: success
 
-      # 2. 统一解压到 pkg 目录
       - name: Unzip all
         run: |
           mkdir -p ./pkg
-          for zip in ./zips/*.zip; do
-            unzip -q "$zip" -d ./pkg
-          done
+          find ./zips -name '*.zip' -exec unzip -q {} -d ./pkg \;
 
-      # 3. 安装 coscmd 并配置密钥
       - name: Setup coscmd
         run: |
           pip install coscmd
@@ -46,12 +38,9 @@ jobs:
                         -b ${{ env.COS_BUCKET }} \
                         -r ${{ env.COS_REGION }}
 
-      # 4. 先清空远程目录
       - name: Clean remote folder
-        run: |
-          coscmd delete -r -f ${{ env.COS_TARGET_DIR }}
+        run: coscmd delete -r -f ${{ env.COS_TARGET_DIR }}
 
-      # 5. 再全量上传新包
+
       - name: Upload new builds
-        run: |
-          coscmd upload -r ./pkg/ ${{ env.COS_TARGET_DIR }}
+        run: coscmd upload -r ./pkg/ ${{ env.COS_TARGET_DIR }}
