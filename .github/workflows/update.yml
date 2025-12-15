@@ -37,7 +37,7 @@ jobs:
         run: |
           pip uninstall -y coscmd cos-python-sdk-v5
           pip install -U pip
-          pip install -i https://mirrors.tencent.com/pypi/simple/ coscmd
+          pip install coscmd
           coscmd --version
           coscmd config -a ${{ secrets.TENCENT_SECRET_ID }} \
                         -s ${{ secrets.TENCENT_SECRET_KEY }} \
@@ -49,4 +49,7 @@ jobs:
 
 
       - name: Upload new builds
-        run: coscmd upload --recursive --thread 16 --part_size 8 ./pkg/ /RankHub/
+        run: | 
+          export MAX_THREAD=30
+          export PART_SIZE=8
+          coscmd upload -r ./pkg/ /RankHub/
