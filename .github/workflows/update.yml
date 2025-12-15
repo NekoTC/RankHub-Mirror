@@ -28,12 +28,10 @@ jobs:
       - name: Unzip all
         run: |
           mkdir -p ./pkg
-          find ./zips -name '*.zip' -exec unzip -q {} -d ./pkg \;
-          # ---- 调试 ----
-          echo ">>> zip count:"
-          find ./zips -name '*.zip' | wc -l
-          echo ">>> pkg folder:"
-          ls -l ./pkg || echo "pkg is empty!"
+          find ./zips -type f \( -iname '*.apk' -o -iname '*.ipa' \) -exec mv {} ./pkg/ \;
+          find ./zips -type d -empty -delete
+          echo ">>> final pkg:"
+          ls -lh ./pkg
 
       - name: Setup coscmd
         run: |
