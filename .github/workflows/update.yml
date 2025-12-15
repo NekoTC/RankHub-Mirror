@@ -29,6 +29,11 @@ jobs:
         run: |
           mkdir -p ./pkg
           find ./zips -name '*.zip' -exec unzip -q {} -d ./pkg \;
+          # ---- 调试 ----
+          echo ">>> zip count:"
+          find ./zips -name '*.zip' | wc -l
+          echo ">>> pkg folder:"
+          ls -l ./pkg || echo "pkg is empty!"
 
       - name: Setup coscmd
         run: |
