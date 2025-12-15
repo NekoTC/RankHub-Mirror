@@ -46,4 +46,4 @@ jobs:
 
 
       - name: Upload new builds
-        run: coscmd upload -r -j 16 -p 8 ./pkg/ ${{ env.COS_TARGET_DIR }}
+        run: coscmd upload --recursive --thread 16 --part_size 8 ./pkg/ /RankHub/
