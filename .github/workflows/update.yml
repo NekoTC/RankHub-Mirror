@@ -35,7 +35,10 @@ jobs:
 
       - name: Setup coscmd
         run: |
-          pip install coscmd
+          pip uninstall -y coscmd cos-python-sdk-v5
+          pip install -U pip
+          pip install -i https://mirrors.tencent.com/pypi/simple/ coscmd
+          coscmd --version
           coscmd config -a ${{ secrets.TENCENT_SECRET_ID }} \
                         -s ${{ secrets.TENCENT_SECRET_KEY }} \
                         -b ${{ env.COS_BUCKET }} \
