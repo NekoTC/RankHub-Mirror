@@ -6,8 +6,8 @@ on:
     - cron: '0 */12 * * *'
 
 env:
-  COS_REGION: ap-chongqing
-  COS_BUCKET: nekotc-1301711413
+  COS_REGION: ap-tokyo
+  COS_BUCKET: nekotcint-1301711413
   COS_TARGET_DIR: /RankHub/
 
 jobs:
